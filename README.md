@@ -1,0 +1,46 @@
+# novel-to-short-video
+
+把小說內容自動轉成 50–60 秒、可循環播放的短影音之 Codex Skill。
+
+此 Skill 會：
+
+- 從小說中挑出最有張力的 3 個場景
+- 產生首尾閉環（開頭與結尾呼應）的短影音旁白腳本
+- 呼叫文生圖生成場景圖
+- 呼叫配音工具生成旁白與字幕
+- 用 Remotion 組裝與輸出影片，並保留可調整的 Remotion 專案
+
+## 依賴 Skills
+
+- `openai-text-to-image-storyboard`
+- `docs-to-voice`
+- `remotion-best-practices`
+
+## 專案結構
+
+```text
+novel-to-short-video/
+├── SKILL.md
+├── agents/
+│   └── openai.yaml
+├── README.md
+└── LICENSE
+```
+
+## 使用方式
+
+1. 把此資料夾放在 Codex skills 目錄下。
+2. 於對話中使用 `$novel-to-short-video` 觸發。
+3. 提供 `project_dir`、`content_name` 與小說內容。
+4. Skill 會依流程輸出圖片、配音、字幕與短影音。
+
+## 輸出重點
+
+- 每支短影音長度維持在 **50–60 秒**
+- 固定提取 **3 個高張力場景**
+- 結尾語句與畫面回扣開頭，形成閉環
+- Remotion 專案預設保留，便於後續手動調整
+
+## License
+
+本專案採用 [MIT License](./LICENSE)。

@@ -1,0 +1,4 @@
+interface:
+  display_name: "Novel to Short Video"
+  short_description: "Turn novel scenes into looping 50-60s short videos"
+  default_prompt: "Use $novel-to-short-video to extract the 3 most dramatic scenes from my novel, generate storyboard images and voiceover, and render a 50-60 second looping short video while keeping the Remotion project editable."

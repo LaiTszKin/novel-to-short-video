@@ -1,6 +1,6 @@
 ---
 name: novel-to-short-video
-description: Convert novel text into loopable short-form videos by extracting the 3 highest-tension scenes, generating images and voiceover, and assembling a Remotion render. Use when users ask to turn novels or chapters into 50-60 second narrative shorts, teaser reels, or looping story clips.
+description: Convert novel text into a loopable short-form video by extracting the single most compelling story segment, generating images and voiceover, and assembling a Remotion render. Use when users ask to turn novels or chapters into a 50-60 second narrative short, teaser reel, or looping story clip that feels self-contained yet leaves strong lingering curiosity.
 ---
 
 # Novel to Short Video
@@ -29,15 +29,20 @@ If critical inputs are missing, ask concise follow-up questions.
 
 ## Workflow
 
-### 1) Extract 3 high-tension scenes
+### 1) Extract one highlight segment
 
-- Parse the novel and list candidate scenes.
-- Score each scene by conflict intensity, stakes, emotional swing, turning-point value, and visual concreteness.
-- Select exactly **3** scenes with the strongest tension while preserving narrative coherence.
-- Keep a structured scene sheet for each selected scene:
+- Parse the novel and list candidate high-tension segments.
+- Score each segment by conflict intensity, stakes, emotional swing, turning-point value, visual concreteness, standalone readability, and cliffhanger potential.
+- Select exactly **1** segment with the strongest overall dramatic impact.
+- Reject segments that cannot be understood without heavy external context from other chapters.
+- Prefer segments that can deliver a complete mini-arc while still leaving one meaningful unresolved question.
+- Keep a structured segment sheet:
   - `title`
   - `source_excerpt`
   - `core_conflict`
+  - `tension_arc` (setup -> escalation -> climax -> aftershock)
+  - `standalone_story_basis`
+  - `lingering_question`
   - `visual_beats`
   - `narration_key_line`
 
@@ -50,12 +55,13 @@ If critical inputs are missing, ask concise follow-up questions.
 - Build the plan content from template file:
   - `references/plan-template.md`
 - The plan markdown must include:
-  - scene list,
-  - script text for each scene,
-  - image assets that will be generated for each scene.
+  - selected highlight segment details,
+  - narration script and beat-level timing for the full video,
+  - standalone-story check and lingering-question design,
+  - image assets that will be generated for the segment.
 - All template guidance/placeholders must be wrapped in square brackets (for example `[fill_this]`).
 - After filling content, remove every placeholder/guidance marker from the final plan file.
-- Enforce 1:1 mapping: each selected scene must support one video segment.
+- Enforce 1:1 mapping: one selected highlight segment must map to one full 50-60 second video.
 
 ### 3) Request user approval before execution (required)
 
@@ -67,12 +73,16 @@ If critical inputs are missing, ask concise follow-up questions.
 ### 4) Build a loopable 50-60s script
 
 - Produce one short video with total duration in **50-60 seconds**.
-- Distribute timing across the 3 scenes (roughly even pacing plus transitions).
+- Build pacing within the same segment using beat progression (hook -> escalation -> climax -> loop closure).
+- Make the segment self-contained as a mini-story:
+  - viewers can understand setup, conflict, turning point, and immediate outcome without prior chapter context,
+  - the narration provides enough context in-line rather than relying on outside exposition.
 - Write narration so:
   - first sentence is the hook,
-  - final sentence closes the loop by reusing or tightly paraphrasing the first sentence.
+  - final sentence closes the loop by reusing or tightly paraphrasing the first sentence,
+  - ending still leaves one unresolved high-stakes question so viewers feel "意猶未盡".
 - Ensure the final visual beat can cut/fade back to the opening frame naturally.
-- Use the plan markdown as the source of truth and keep scene order aligned with it.
+- Use the plan markdown as the source of truth and keep beat order aligned with it.
 
 If producing multiple short videos in one request, enforce the same 50-60 second duration for each output.
 
@@ -80,8 +90,8 @@ If producing multiple short videos in one request, enforce the same 50-60 second
 
 - Create `prompts.json` under:
   - `<project_dir>/pictures/<content_name>/prompts.json`
-- Provide scene prompts in narrative order, reusing recurring character skeletons for consistency.
-- Ensure prompts match the images listed in the plan markdown.
+- Provide beat-based prompts in narrative order, reusing recurring character skeletons for consistency.
+- Ensure prompts match the image list defined in the plan markdown.
 - Generate images with:
 
 ```bash
@@ -113,8 +123,8 @@ python /Users/tszkinlai/.codex/skills/docs-to-voice/scripts/docs_to_voice.py \
   - `rules/audio.md`
   - `rules/subtitles.md`
   - `rules/transitions.md`
-- Implement scene sequencing with subtitle sync from SRT.
-- Keep one contiguous segment per scene so the plan's scene-to-segment mapping remains valid.
+- Implement beat sequencing with subtitle sync from SRT.
+- Keep one contiguous narrative segment so the plan's segment-to-video mapping remains valid.
 - Add loop closure in the tail section:
   - final 1-2 seconds visually connect back to opening shot,
   - final spoken line closes back to opening hook.
@@ -140,7 +150,8 @@ dist/
 
 Return:
 
-- selected 3-scene summary (with why each was selected)
+- selected highlight-segment summary (with why it was selected)
+- proof note that the segment is self-contained and why the ending still leaves viewers wanting more
 - plan markdown path (`<project_dir>/docs/plans/<YYYY-MM-DD>-<chapter_slug>.md`)
 - explicit user approval confirmation (before asset generation)
 - generated image directory path
@@ -153,14 +164,16 @@ Return:
 
 Before finishing, verify all conditions:
 
-- exactly 3 high-tension scenes selected
+- exactly 1 highest-impact highlight segment selected
+- selected segment is understandable as a standalone mini-story
 - plan markdown exists in `docs/plans/` with date + chapter naming
 - plan content starts from `references/plan-template.md`
-- plan markdown includes scenes, per-scene scripts, and per-scene image generation list
+- plan markdown includes the selected segment, beat/script details, standalone-story check, lingering-question design, and segment image generation list
 - all bracketed placeholders/guidance are removed from the final filled plan
 - user explicitly approved the plan before image/voice/render steps
-- each scene maps to one video segment
+- one selected segment maps to one full output video
 - duration is within 50-60 seconds per output video
 - opening and ending lines form a narrative loop
+- ending leaves one unresolved but compelling question
 - images and voice assets are generated successfully
 - Remotion project is preserved and `.gitignore` is configured

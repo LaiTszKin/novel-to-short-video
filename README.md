@@ -8,16 +8,14 @@
 - 確保該段能自成一個完整迷你故事（看單支也看得懂）
 - 同時在結尾留下關鍵懸念，讓觀眾意猶未盡
 - 先依 `references/plan-template.md` 產出前置規劃文件（`docs/plans/<日期>-<章節>.md`）
-- 取得使用者同意 plan 後才開始圖片/配音/渲染
-- 產生首尾閉環（開頭與結尾呼應）的短影音旁白腳本
+- 取得使用者同意 plan 後才開始圖片/渲染
+- 產生首尾閉環（開頭與結尾呼應）的短影音故事腳本
 - 呼叫文生圖生成場景圖
-- 呼叫配音工具生成旁白與字幕
 - 用 Remotion 組裝與輸出影片，並保留可調整的 Remotion 專案
 
 ## 依賴 Skills
 
 - `openai-text-to-image-storyboard`
-- `docs-to-voice`
 - `remotion-best-practices`
 
 ## 專案結構
@@ -39,7 +37,7 @@ novel-to-short-video/
 2. 於對話中使用 `$novel-to-short-video` 觸發。
 3. 提供 `project_dir`、`content_name` 與小說內容。
 4. Skill 會先在 `docs/plans/` 生成計劃 Markdown，並等待你同意。
-5. 取得你同意後，才會依流程輸出圖片、配音、字幕與短影音。
+5. 取得你同意後，才會依流程輸出圖片與短影音（可無聲）。
 
 ## 輸出重點
 
@@ -50,6 +48,7 @@ novel-to-short-video/
 - 先落地規劃文件：`<project_dir>/docs/plans/<YYYY-MM-DD>-<chapter_slug>.md`
 - 規劃文件以 `references/plan-template.md` 為模板，且填寫後需移除 placeholder
 - 結尾語句與畫面回扣開頭，形成閉環
+- 預設不強制音訊生成，支援無聲短影音流程
 - Remotion 專案預設保留，便於後續手動調整
 
 ## License

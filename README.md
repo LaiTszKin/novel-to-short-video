@@ -5,6 +5,8 @@
 此 Skill 會：
 
 - 從小說中挑出最有張力的 3 個場景
+- 先依 `references/plan-template.md` 產出前置規劃文件（`docs/plans/<日期>-<章節>.md`）
+- 取得使用者同意 plan 後才開始圖片/配音/渲染
 - 產生首尾閉環（開頭與結尾呼應）的短影音旁白腳本
 - 呼叫文生圖生成場景圖
 - 呼叫配音工具生成旁白與字幕
@@ -23,6 +25,8 @@ novel-to-short-video/
 ├── SKILL.md
 ├── agents/
 │   └── openai.yaml
+├── references/
+│   └── plan-template.md
 ├── README.md
 └── LICENSE
 ```
@@ -32,12 +36,16 @@ novel-to-short-video/
 1. 把此資料夾放在 Codex skills 目錄下。
 2. 於對話中使用 `$novel-to-short-video` 觸發。
 3. 提供 `project_dir`、`content_name` 與小說內容。
-4. Skill 會依流程輸出圖片、配音、字幕與短影音。
+4. Skill 會先在 `docs/plans/` 生成計劃 Markdown，並等待你同意。
+5. 取得你同意後，才會依流程輸出圖片、配音、字幕與短影音。
 
 ## 輸出重點
 
 - 每支短影音長度維持在 **50–60 秒**
 - 固定提取 **3 個高張力場景**
+- 每個場景都對應一段影片段落（scene-to-segment 1:1）
+- 先落地規劃文件：`<project_dir>/docs/plans/<YYYY-MM-DD>-<chapter_slug>.md`
+- 規劃文件以 `references/plan-template.md` 為模板，且填寫後需移除 placeholder
 - 結尾語句與畫面回扣開頭，形成閉環
 - Remotion 專案預設保留，便於後續手動調整
 

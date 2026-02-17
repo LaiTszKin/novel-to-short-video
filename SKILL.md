@@ -88,32 +88,14 @@ If producing multiple short videos in one request, enforce the same 50-60 second
 
 ### 5) Create `roles.json` for recurring character prompts (required)
 
+- Before creating/updating `roles.json`, read:
+  - `references/roles-json.md`
 - Create `roles.json` under:
   - `<project_dir>/pictures/<content_name>/roles.json`
+- If `roles.json` does not exist, create it first before any `prompts.json` planning or generation.
 - If `roles.json` already exists, read existing role prompts first and reuse matching roles.
 - If a required role is missing, append a new role prompt entry for that role (do not overwrite existing entries).
-- Save recurring character prompt skeletons using the same schema defined by `openai-text-to-image-storyboard`:
-  - `id`
-  - `name`
-  - `appearance`
-  - `outfit`
-  - `description`
-- Use this JSON shape:
-
-```json
-{
-  "characters": [
-    {
-      "id": "lin_xia",
-      "name": "Lin Xia",
-      "appearance": "short black hair, amber eyes, slim build",
-      "outfit": "dark trench coat, silver pendant, leather boots",
-      "description": "standing calmly, observant expression"
-    }
-  ]
-}
-```
-
+- Save recurring character prompt skeletons using the schema in `references/roles-json.md`.
 - If the selected segment has no recurring roles, still create `roles.json` with `{"characters": []}`.
 - Keep role IDs stable and reuse them in every scene prompt.
 
@@ -205,7 +187,7 @@ Before finishing, verify all conditions:
 - plan markdown includes the selected segment, beat/script details, standalone-story check, lingering-question design, and segment image generation list
 - all bracketed placeholders/guidance are removed from the final filled plan
 - user explicitly approved the plan before image/voice/render steps
-- `roles.json` exists and uses the `characters` schema (`id/name/appearance/outfit/description`)
+- `roles.json` exists and follows `references/roles-json.md`
 - existing role prompts are reused when available; new role prompts are added only when missing
 - `prompts.json` uses structured mode and reuses role IDs from `roles.json`
 - one selected segment maps to one full output video

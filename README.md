@@ -10,7 +10,7 @@
 - 先依 `references/plan-template.md` 產出前置規劃文件（`docs/plans/<日期>-<章節>.md`）
 - 取得使用者同意 plan 後才開始圖片/配音/渲染
 - 產生首尾閉環（開頭與結尾呼應）的短影音旁白腳本
-- 先讀取既有 `roles.json` 角色提示並重用，缺少角色才新增 prompt（格式對齊 `openai-text-to-image-storyboard`）
+- 若不存在 `roles.json`，先建立後再進入 prompt 流程；若已存在則先重用既有角色，缺少角色才新增（格式見 `references/roles-json.md`）
 - 呼叫文生圖生成場景圖
 - 呼叫配音工具生成旁白與字幕
 - 用 Remotion 組裝與輸出影片，並保留可調整的 Remotion 專案
@@ -29,7 +29,8 @@ novel-to-short-video/
 ├── agents/
 │   └── openai.yaml
 ├── references/
-│   └── plan-template.md
+│   ├── plan-template.md
+│   └── roles-json.md
 ├── README.md
 └── LICENSE
 ```
@@ -50,7 +51,7 @@ novel-to-short-video/
 - 內容需自成故事（起承衝結果清楚）但結尾保留一個未解問題
 - 先落地規劃文件：`<project_dir>/docs/plans/<YYYY-MM-DD>-<chapter_slug>.md`
 - 規劃文件以 `references/plan-template.md` 為模板，且填寫後需移除 placeholder
-- 角色骨架檔：`<project_dir>/pictures/<content_name>/roles.json`（重用既有角色、僅補缺；欄位 `id/name/appearance/outfit/description`）
+- 角色骨架檔：`<project_dir>/pictures/<content_name>/roles.json`（重用既有角色、僅補缺；格式見 `references/roles-json.md`）
 - 結尾語句與畫面回扣開頭，形成閉環
 - Remotion 專案預設保留，便於後續手動調整
 

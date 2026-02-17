@@ -1,4 +1,4 @@
 interface:
   display_name: "Novel to Short Video"
   short_description: "Turn the best novel segment into a looping 50-60s short video"
-  default_prompt: "Use $novel-to-short-video to extract the single most compelling segment from my novel, ensure it forms a self-contained mini-story while ending with lingering curiosity, create a plan markdown from references/plan-template.md under docs/plans with date+chapter naming, wait for my approval, then generate storyboard images and render a 50-60 second looping short video while keeping the Remotion project editable."
+  default_prompt: "Use $novel-to-short-video to extract the single most compelling segment from my novel, ensure it forms a self-contained mini-story while ending with lingering curiosity, create a plan markdown from references/plan-template.md under docs/plans with date+chapter naming, wait for my approval, then generate storyboard images and voiceover, and render a 50-60 second looping short video while keeping the Remotion project editable."

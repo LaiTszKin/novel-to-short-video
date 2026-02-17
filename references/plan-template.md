@@ -16,8 +16,8 @@
 - Standalone Story Basis: [how_viewers_can_understand_this_segment_without_prior_context]
 - Lingering Question: [the_single_unresolved_question_left_at_the_end]
 
-### Story Script (50-60s)
-[full_story_script_for_single_segment]
+### Narration Script (50-60s)
+[full_narration_script_for_single_segment]
 
 ### Beat Plan
 1. [beat_1_title]

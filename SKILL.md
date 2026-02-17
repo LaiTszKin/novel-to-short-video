@@ -1,6 +1,6 @@
 ---
 name: novel-to-short-video
-description: Convert novel text into a loopable short-form video by extracting the single most compelling story segment, generating images, and assembling a Remotion render. Use when users ask to turn novels or chapters into a 50-60 second narrative short, teaser reel, or looping story clip that feels self-contained yet leaves strong lingering curiosity.
+description: Convert novel text into a loopable short-form video by extracting the single most compelling story segment, generating images and voiceover, and assembling a Remotion render. Use when users ask to turn novels or chapters into a 50-60 second narrative short, teaser reel, or looping story clip that feels self-contained yet leaves strong lingering curiosity.
 ---
 
 # Novel to Short Video
@@ -10,7 +10,8 @@ description: Convert novel text into a loopable short-form video by extracting t
 Always coordinate these skills in order:
 
 1. `openai-text-to-image-storyboard` for storyboard image generation.
-2. `remotion-best-practices` for composition and rendering in Remotion.
+2. `docs-to-voice` for narration audio, sentence timeline, and SRT.
+3. `remotion-best-practices` for composition and rendering in Remotion.
 
 If a user uses approximate names (for example "openai-text-to-images" or "remotionbest-practises"), normalize to the exact skill names above.
 
@@ -22,6 +23,7 @@ Collect the minimum required inputs before execution:
 - `content_name` (output folder/video name)
 - novel content (raw text or file path)
 - output orientation/resolution (default: vertical 1080x1920)
+- narration language/voice preferences when provided
 
 If critical inputs are missing, ask concise follow-up questions.
 
@@ -42,11 +44,11 @@ If critical inputs are missing, ask concise follow-up questions.
   - `standalone_story_basis`
   - `lingering_question`
   - `visual_beats`
-  - `story_key_line`
+  - `narration_key_line`
 
 ### 2) Generate a pre-production plan markdown (required)
 
-- Before image/video generation, create:
+- Before image/voice/video generation, create:
   - `<project_dir>/docs/plans/`
   - `<project_dir>/docs/plans/<YYYY-MM-DD>-<chapter_slug>.md`
 - `chapter_slug` should come from the chapter name/number and be filesystem-safe.
@@ -54,7 +56,7 @@ If critical inputs are missing, ask concise follow-up questions.
   - `references/plan-template.md`
 - The plan markdown must include:
   - selected highlight segment details,
-  - story script and beat-level timing for the full video,
+  - narration script and beat-level timing for the full video,
   - standalone-story check and lingering-question design,
   - image assets that will be generated for the segment.
 - All template guidance/placeholders must be wrapped in square brackets (for example `[fill_this]`).
@@ -65,17 +67,17 @@ If critical inputs are missing, ask concise follow-up questions.
 
 - Present the generated plan markdown to the user (path + concise summary).
 - Ask for explicit approval.
-- Do not start image/render execution until user explicitly agrees.
+- Do not start image/voice/render execution until user explicitly agrees.
 - If user asks for edits, update the plan and request approval again.
 
-### 4) Build a loopable 50-60s story script
+### 4) Build a loopable 50-60s script
 
 - Produce one short video with total duration in **50-60 seconds**.
 - Build pacing within the same segment using beat progression (hook -> escalation -> climax -> loop closure).
 - Make the segment self-contained as a mini-story:
   - viewers can understand setup, conflict, turning point, and immediate outcome without prior chapter context,
-  - the story script provides enough context in-line rather than relying on outside exposition.
-- Write the story script so:
+  - the narration provides enough context in-line rather than relying on outside exposition.
+- Write narration so:
   - first sentence is the hook,
   - final sentence closes the loop by reusing or tightly paraphrasing the first sentence,
   - ending still leaves one unresolved high-stakes question so viewers feel "意猶未盡".
@@ -100,22 +102,36 @@ python /Users/tszkinlai/.codex/skills/openai-text-to-image-storyboard/scripts/ge
   --prompts-file "<project_dir>/pictures/<content_name>/prompts.json"
 ```
 
-### 6) Compose and render (`remotion-best-practices`)
+### 6) Generate narration and subtitles (`docs-to-voice`)
+
+- Use the loop script text as narration input.
+- Generate audio + timeline + SRT:
+
+```bash
+python /Users/tszkinlai/.codex/skills/docs-to-voice/scripts/docs_to_voice.py \
+  --project-dir "<project_dir>" \
+  --project-name "<content_name>" \
+  --text "<loop_narration_script>"
+```
+
+### 7) Compose and render (`remotion-best-practices`)
 
 - Build or reuse Remotion workspace:
   - `<project_dir>/video/<content_name>/remotion/`
 - Load Remotion rules as needed (at minimum):
   - `rules/compositions.md`
+  - `rules/audio.md`
+  - `rules/subtitles.md`
   - `rules/transitions.md`
-- Implement beat sequencing with clean visual pacing based on the plan script.
+- Implement beat sequencing with subtitle sync from SRT.
 - Keep one contiguous narrative segment so the plan's segment-to-video mapping remains valid.
 - Add loop closure in the tail section:
   - final 1-2 seconds visually connect back to opening shot,
-  - final script line closes back to opening hook.
+  - final spoken line closes back to opening hook.
 - Render MP4 output to:
   - `<project_dir>/video/<content_name>/renders/`
 
-### 7) Keep Remotion project and enforce `.gitignore`
+### 8) Keep Remotion project and enforce `.gitignore`
 
 Preserve Remotion project sources for user revisions. Do not delete project files after rendering.
 
@@ -139,6 +155,8 @@ Return:
 - plan markdown path (`<project_dir>/docs/plans/<YYYY-MM-DD>-<chapter_slug>.md`)
 - explicit user approval confirmation (before asset generation)
 - generated image directory path
+- narration audio path
+- subtitle SRT path
 - final rendered video path
 - Remotion project path (retained for adjustments)
 
@@ -152,10 +170,10 @@ Before finishing, verify all conditions:
 - plan content starts from `references/plan-template.md`
 - plan markdown includes the selected segment, beat/script details, standalone-story check, lingering-question design, and segment image generation list
 - all bracketed placeholders/guidance are removed from the final filled plan
-- user explicitly approved the plan before image/render steps
+- user explicitly approved the plan before image/voice/render steps
 - one selected segment maps to one full output video
 - duration is within 50-60 seconds per output video
 - opening and ending lines form a narrative loop
 - ending leaves one unresolved but compelling question
-- image assets are generated successfully
+- images and voice assets are generated successfully
 - Remotion project is preserved and `.gitignore` is configured

@@ -2,13 +2,6 @@
 
 All notable changes to this project will be documented in this file.
 
-## [0.3.0] - 2026-02-16
-
-### Changed
-- Remove required audio generation from the core workflow and drop the `docs-to-voice` dependency.
-- Update the planning/output/quality sections to support a fully silent 50-60 second render flow.
-- Update README and agent default prompt so execution no longer assumes voiceover or subtitles.
-
 ## [0.2.1] - 2026-02-16
 
 ### Changed

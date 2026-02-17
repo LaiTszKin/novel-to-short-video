@@ -58,7 +58,8 @@ If critical inputs are missing, ask concise follow-up questions.
   - selected highlight segment details,
   - narration script and beat-level timing for the full video,
   - standalone-story check and lingering-question design,
-  - image assets that will be generated for the segment.
+  - image assets that will be generated for the segment,
+  - beat-level special-effect cues with intensity guardrails for audience focus.
 - All template guidance/placeholders must be wrapped in square brackets (for example `[fill_this]`).
 - After filling content, remove every placeholder/guidance marker from the final plan file.
 - Enforce 1:1 mapping: one selected highlight segment must map to one full 50-60 second video.
@@ -90,12 +91,15 @@ If producing multiple short videos in one request, enforce the same 50-60 second
 
 - Before creating/updating `roles.json`, read:
   - `references/roles-json.md`
+- Create directory if missing:
+  - `<project_dir>/roles/`
 - Create `roles.json` under:
-  - `<project_dir>/pictures/<content_name>/roles.json`
+  - `<project_dir>/roles/roles.json`
 - If `roles.json` does not exist, create it first before any `prompts.json` planning or generation.
 - If `roles.json` already exists, read existing role prompts first and reuse matching roles.
 - If a required role is missing, append a new role prompt entry for that role (do not overwrite existing entries).
 - Save recurring character prompt skeletons using the schema in `references/roles-json.md`.
+- Treat this file as the shared role registry for both short-video and long-video workflows in the same project.
 - If the selected segment has no recurring roles, still create `roles.json` with `{"characters": []}`.
 - Keep role IDs stable and reuse them in every scene prompt.
 
@@ -137,8 +141,18 @@ python /Users/tszkinlai/.codex/skills/docs-to-voice/scripts/docs_to_voice.py \
   - `rules/audio.md`
   - `rules/subtitles.md`
   - `rules/transitions.md`
+  - `rules/animations.md`
+  - `rules/text-animations.md`
+  - `rules/light-leaks.md`
 - Implement beat sequencing with subtitle sync from SRT.
 - Keep one contiguous narrative segment so the plan's segment-to-video mapping remains valid.
+- Apply attention-retention effects according to the approved beat plan:
+  - hook beat uses quick visual emphasis (for example punch-in, kinetic subtitle, or parallax),
+  - escalation/climax beats use one dominant impact effect each (for example shake, flash, light leak, or speed ramp),
+  - loop-closure beat reduces effect intensity and transitions cleanly back to the opening frame.
+- Keep effect density controlled:
+  - do not stack multiple high-intensity effects at the same time,
+  - avoid aggressive flashing that harms subtitle readability.
 - Add loop closure in the tail section:
   - final 1-2 seconds visually connect back to opening shot,
   - final spoken line closes back to opening hook.
@@ -168,8 +182,9 @@ Return:
 - proof note that the segment is self-contained and why the ending still leaves viewers wanting more
 - plan markdown path (`<project_dir>/docs/plans/<YYYY-MM-DD>-<chapter_slug>.md`)
 - explicit user approval confirmation (before asset generation)
-- roles prompt file path (`<project_dir>/pictures/<content_name>/roles.json`)
+- roles prompt file path (`<project_dir>/roles/roles.json`)
 - prompts file path (`<project_dir>/pictures/<content_name>/prompts.json`)
+- beat-level special-effects summary used in the final render
 - generated image directory path
 - narration audio path
 - subtitle SRT path
@@ -185,6 +200,7 @@ Before finishing, verify all conditions:
 - plan markdown exists in `docs/plans/` with date + chapter naming
 - plan content starts from `references/plan-template.md`
 - plan markdown includes the selected segment, beat/script details, standalone-story check, lingering-question design, and segment image generation list
+- plan markdown includes a beat-level special-effects map plus intensity guardrails
 - all bracketed placeholders/guidance are removed from the final filled plan
 - user explicitly approved the plan before image/voice/render steps
 - `roles.json` exists and follows `references/roles-json.md`
@@ -193,6 +209,7 @@ Before finishing, verify all conditions:
 - one selected segment maps to one full output video
 - duration is within 50-60 seconds per output video
 - opening and ending lines form a narrative loop
+- special effects strengthen hook/escalation/climax focus without breaking subtitle readability
 - ending leaves one unresolved but compelling question
 - images and voice assets are generated successfully
 - Remotion project is preserved and `.gitignore` is configured

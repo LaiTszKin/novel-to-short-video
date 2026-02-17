@@ -2,7 +2,7 @@
 
 Use this schema when creating or updating:
 
-- `<project_dir>/pictures/<content_name>/roles.json`
+- `<project_dir>/roles/roles.json`
 
 ## JSON Shape
 
@@ -37,3 +37,5 @@ Use this schema when creating or updating:
 ```json
 {"characters": []}
 ```
+
+Use this shared file so short-video and long-video skills can reuse the same role definitions within one project.

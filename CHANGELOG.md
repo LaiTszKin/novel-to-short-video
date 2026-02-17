@@ -2,6 +2,15 @@
 
 All notable changes to this project will be documented in this file.
 
+## [0.3.0] - 2026-02-17
+
+### Changed
+- Move shared role registry path to `<project_dir>/roles/roles.json` and align workflow docs/prompt references.
+- Require pre-production plans to include beat-level audience-focus special-effect cues and intensity guardrails.
+- Expand Remotion composition workflow to load animation/light-leak guidance and apply controlled effects across hook, escalation, climax, and loop-closure beats.
+- Update README, output contract, and default agent prompt to explicitly include attention-retention special effects in final video production.
+- Update plan template with per-beat `focus effect` fields and an `Audience Focus Effects` section.
+
 ## [0.2.2] - 2026-02-17
 
 ### Changed

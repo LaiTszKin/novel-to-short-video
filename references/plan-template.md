@@ -23,15 +23,19 @@
 1. [beat_1_title]
    - duration: [beat_1_seconds]
    - purpose: [hook_or_setup]
+   - focus effect: [hook_effect_and_trigger]
 2. [beat_2_title]
    - duration: [beat_2_seconds]
    - purpose: [conflict_escalation]
+   - focus effect: [escalation_effect_and_trigger]
 3. [beat_3_title]
    - duration: [beat_3_seconds]
    - purpose: [climax]
+   - focus effect: [climax_effect_and_trigger]
 4. [beat_4_title]
    - duration: [beat_4_seconds]
    - purpose: [loop_closure]
+   - focus effect: [loop_closure_effect_and_trigger]
 
 ### Images to Generate
 - [segment_img01.png]: [image_prompt_or_intent_1]
@@ -42,6 +46,13 @@
 ### Video Segment
 - duration: [50-60 seconds]
 - purpose: [how_this_single_segment_supports_the_full_video]
+
+### Audience Focus Effects
+- Hook emphasis: [quick_attention_grabber_for_first_2_seconds]
+- Escalation emphasis: [mid_video_attention_lift_effect]
+- Climax emphasis: [peak_impact_effect]
+- Loop-return treatment: [how_effects_taper_before_returning_to_opening_frame]
+- Intensity guardrails: [limits_to_prevent_effect_overload_or_subtitle_obstruction]
 
 ## Story Satisfaction Check
 - Mini-story completeness: [setup_conflict_turning_point_immediate_outcome_are_all_clear]

@@ -86,11 +86,43 @@ If critical inputs are missing, ask concise follow-up questions.
 
 If producing multiple short videos in one request, enforce the same 50-60 second duration for each output.
 
-### 5) Generate storyboard images (`openai-text-to-image-storyboard`)
+### 5) Create `roles.json` for recurring character prompts (required)
+
+- Create `roles.json` under:
+  - `<project_dir>/pictures/<content_name>/roles.json`
+- If `roles.json` already exists, read existing role prompts first and reuse matching roles.
+- If a required role is missing, append a new role prompt entry for that role (do not overwrite existing entries).
+- Save recurring character prompt skeletons using the same schema defined by `openai-text-to-image-storyboard`:
+  - `id`
+  - `name`
+  - `appearance`
+  - `outfit`
+  - `description`
+- Use this JSON shape:
+
+```json
+{
+  "characters": [
+    {
+      "id": "lin_xia",
+      "name": "Lin Xia",
+      "appearance": "short black hair, amber eyes, slim build",
+      "outfit": "dark trench coat, silver pendant, leather boots",
+      "description": "standing calmly, observant expression"
+    }
+  ]
+}
+```
+
+- If the selected segment has no recurring roles, still create `roles.json` with `{"characters": []}`.
+- Keep role IDs stable and reuse them in every scene prompt.
+
+### 6) Generate storyboard images (`openai-text-to-image-storyboard`)
 
 - Create `prompts.json` under:
   - `<project_dir>/pictures/<content_name>/prompts.json`
-- Provide beat-based prompts in narrative order, reusing recurring character skeletons for consistency.
+- Use the structured JSON prompt format from `openai-text-to-image-storyboard`.
+- Copy top-level `characters` from the final `roles.json` (reused + newly appended roles), then build beat-aligned `scenes` in narrative order.
 - Ensure prompts match the image list defined in the plan markdown.
 - Generate images with:
 
@@ -102,7 +134,7 @@ python /Users/tszkinlai/.codex/skills/openai-text-to-image-storyboard/scripts/ge
   --prompts-file "<project_dir>/pictures/<content_name>/prompts.json"
 ```
 
-### 6) Generate narration and subtitles (`docs-to-voice`)
+### 7) Generate narration and subtitles (`docs-to-voice`)
 
 - Use the loop script text as narration input.
 - Generate audio + timeline + SRT:
@@ -114,7 +146,7 @@ python /Users/tszkinlai/.codex/skills/docs-to-voice/scripts/docs_to_voice.py \
   --text "<loop_narration_script>"
 ```
 
-### 7) Compose and render (`remotion-best-practices`)
+### 8) Compose and render (`remotion-best-practices`)
 
 - Build or reuse Remotion workspace:
   - `<project_dir>/video/<content_name>/remotion/`
@@ -131,7 +163,7 @@ python /Users/tszkinlai/.codex/skills/docs-to-voice/scripts/docs_to_voice.py \
 - Render MP4 output to:
   - `<project_dir>/video/<content_name>/renders/`
 
-### 8) Keep Remotion project and enforce `.gitignore`
+### 9) Keep Remotion project and enforce `.gitignore`
 
 Preserve Remotion project sources for user revisions. Do not delete project files after rendering.
 
@@ -154,6 +186,8 @@ Return:
 - proof note that the segment is self-contained and why the ending still leaves viewers wanting more
 - plan markdown path (`<project_dir>/docs/plans/<YYYY-MM-DD>-<chapter_slug>.md`)
 - explicit user approval confirmation (before asset generation)
+- roles prompt file path (`<project_dir>/pictures/<content_name>/roles.json`)
+- prompts file path (`<project_dir>/pictures/<content_name>/prompts.json`)
 - generated image directory path
 - narration audio path
 - subtitle SRT path
@@ -171,6 +205,9 @@ Before finishing, verify all conditions:
 - plan markdown includes the selected segment, beat/script details, standalone-story check, lingering-question design, and segment image generation list
 - all bracketed placeholders/guidance are removed from the final filled plan
 - user explicitly approved the plan before image/voice/render steps
+- `roles.json` exists and uses the `characters` schema (`id/name/appearance/outfit/description`)
+- existing role prompts are reused when available; new role prompts are added only when missing
+- `prompts.json` uses structured mode and reuses role IDs from `roles.json`
 - one selected segment maps to one full output video
 - duration is within 50-60 seconds per output video
 - opening and ending lines form a narrative loop

@@ -2,6 +2,15 @@
 
 All notable changes to this project will be documented in this file.
 
+## [0.2.2] - 2026-02-17
+
+### Changed
+- Add required workflow step to create `<project_dir>/pictures/<content_name>/roles.json` before image generation.
+- Require `roles.json` to store recurring character prompt skeletons with the `openai-text-to-image-storyboard` schema.
+- Require role prompt reuse: read existing `roles.json` first and reuse matched roles.
+- Only append new role prompts when required roles are missing, instead of recreating all role entries.
+- Update README, output contract, quality checklist, and default agent prompt to include roles file handling.
+
 ## [0.2.1] - 2026-02-16
 
 ### Changed

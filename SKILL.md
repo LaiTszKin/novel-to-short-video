@@ -57,6 +57,7 @@ If critical inputs are missing, ask concise follow-up questions.
 - The plan markdown must include:
   - selected highlight segment details,
   - narration script and beat-level timing for the full video,
+  - narration pacing target (3-4 chars/second) and expected character count budget,
   - standalone-story check and lingering-question design,
   - image assets that will be generated for the segment,
   - beat-level special-effect cues with intensity guardrails for audience focus.
@@ -74,6 +75,8 @@ If critical inputs are missing, ask concise follow-up questions.
 ### 4) Build a loopable 50-60s script
 
 - Produce one short video with total duration in **50-60 seconds**.
+- Keep narration pacing in **3-4 CJK characters per second** (ignore spaces/punctuation in counting).
+- For a 50-60 second output, keep narration around **150-240 CJK characters**.
 - Build pacing within the same segment using beat progression (hook -> escalation -> climax -> loop closure).
 - Make the segment self-contained as a mini-story:
   - viewers can understand setup, conflict, turning point, and immediate outcome without prior chapter context,
@@ -132,6 +135,15 @@ python /Users/tszkinlai/.codex/skills/docs-to-voice/scripts/docs_to_voice.py \
   --text "<loop_narration_script>"
 ```
 
+- Enforce pacing validation after each generation:
+  - Read `audio_duration_seconds` from generated `.timeline.json`.
+  - Compute `chars_per_second = cjk_char_count(loop_narration_script) / audio_duration_seconds`.
+  - Target range is **3.0-4.0 chars/second**.
+- If out of range, regenerate with adjustment (max 3 attempts):
+  - `say` mode: tune `--rate` (increase when `<3.0`, decrease when `>4.0`).
+  - `api` mode: keep voice/model fixed and adjust script length to pull pacing back into range.
+- Do not proceed to Remotion render until narration pacing is within target range.
+
 ### 8) Compose and render (`remotion-best-practices`)
 
 - Build or reuse Remotion workspace:
@@ -188,6 +200,7 @@ Return:
 - generated image directory path
 - narration audio path
 - subtitle SRT path
+- narration pacing proof (`char_count`, `audio_duration_seconds`, `chars_per_second`)
 - final rendered video path
 - Remotion project path (retained for adjustments)
 
@@ -208,6 +221,7 @@ Before finishing, verify all conditions:
 - `prompts.json` uses structured mode and reuses role IDs from `roles.json`
 - one selected segment maps to one full output video
 - duration is within 50-60 seconds per output video
+- narration pacing is within 3-4 CJK chars/second
 - opening and ending lines form a narrative loop
 - special effects strengthen hook/escalation/climax focus without breaking subtitle readability
 - ending leaves one unresolved but compelling question

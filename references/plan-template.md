@@ -65,4 +65,7 @@
 
 ## Timing Check
 - Total duration target: [50-60 seconds]
+- Narration pacing target: [3-4 chars/second]
+- Narration char-count budget: [150-240 CJK chars]
+- Pacing validation formula: [cjk_char_count / audio_duration_seconds]
 - Beat transition notes: [beat_transition_plan]

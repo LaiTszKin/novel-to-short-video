@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file.
 
+## [0.3.1] - 2026-02-18
+
+### Changed
+- Require narration pacing target of 3-4 CJK chars/second in the short-video workflow and planning documents.
+- Add post-generation pacing validation loop for voice assets using timeline duration and character count.
+- Update README and default agent prompt so voice generation explicitly enforces short-video speech rhythm.
+
 ## [0.3.0] - 2026-02-17
 
 ### Changed
